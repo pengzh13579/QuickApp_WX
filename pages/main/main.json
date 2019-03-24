@@ -1,0 +1,6 @@
+{
+    "enablePullDownRefresh": true,
+    "backgroundTextStyle": "dark",
+    "navigationBarTitleText": "快速开发框架",
+    "navigationBarTextStyle":"white"
+}
