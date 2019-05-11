@@ -21,7 +21,6 @@ page{
   flex: auto;   
   background: #fff;  
   border-radius: 6rpx;  
-  text-align: center;
   line-height: 60rpx;
 } 
 
@@ -31,8 +30,11 @@ page{
   line-height: 20rpx;
 
 }  
+.search-wrap .show{  
+  display:inline;
+}  
 .search-wrap  .search-word{  
-  display: inline;  
+  display: flex;  
   padding: 0 15rpx;  
   font-size: 11pt;  
   line-height: 40rpx;

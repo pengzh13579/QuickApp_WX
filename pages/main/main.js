@@ -1,8 +1,8 @@
-
 var currentPage = 1;//当前页,默认 第一页
 
-import url from '../../lib/urls/urls.js';
+import remoteUrls from '../../lib/urls/urls.js';
 import constant from '../../lib/const/checkConstant.js';
+import messageContant from '../../lib/const/msgConstant.js';
 var page = 1;
 var page_size = 10;
 
@@ -27,7 +27,7 @@ var remoteLogin = (success, fail) => {
     success: function (loginRes) {
       console.log("登录获取code", loginRes);
       wx.request({
-        url: url.loginUrl,
+        url: remoteUrls.loginUrl,
         data: {
           code: loginRes.code
         },
@@ -39,11 +39,7 @@ var remoteLogin = (success, fail) => {
             if (typeof fail == "function") {
               fail();
             } else {
-              wx.showModal({
-                title: '提示',
-                content: data.msg,
-                showCancel: false
-              });
+              console.error(data.msg, res);
             }
           } else {//成功
             console.log("登录成功", res);
@@ -98,38 +94,22 @@ var checkLogin = (success, fail) => {
   }
 }
 
-/**
- * 获得用户信息
- */
-var getUserInfo = (success, fail) => {
-  wx.getUserInfo({
-    success: function (res) {
-      var userInfo = res.userInfo
-      if (config.fullLogin) {//上传加密数据
-        wx.request({
-          url: url.fullUserInfoUrl,
-          data: {
-            dianToken: wx.getStorageSync(constant.LOGIN_TOKEN),
-            encryptedData: res.encryptedData,
-            iv: res.iv
-          }, success: function (requestRes) {
-            typeof success == "function" && success(userInfo);
-          }
-        });
-      } else {
-        typeof success == "function" && success(userInfo);
-      }
-    }, fail: function () {
-      typeof fail == "function" && fail();
-    }
-  })
-}
-
 var app = getApp();
 
 Page({
-    data: {
-        list: [],
+  data: {
+        province: '',
+        city: '',
+        area: '',
+        provinceName: '',
+        cityName: '',
+        areaName: '',
+        areaShow: false,
+        list: [{
+          title:'文章标题',
+          des: '文章描述',
+          writetime: '20190423'
+        }],
         imgList: [],
         searchLoading: true, //"上拉加载"的变量，默认false，隐藏  
         searchLoadingComplete: false,  //“没有数据”的变量，默认false，隐藏 
@@ -184,15 +164,9 @@ Page({
         }
         login(() => {
           console.info("main login method invoked...")
-          getUserInfo((userInfo) => {
-            console.log("已获取数据", userInfo);
-            app.data.userInfo = userInfo;
-            app.globalData.userInfo = userInfo
-            that.fetchData();
-          }, () => {
-            console.log("用户拒绝提供信息");
-          });
+          
         });
+        
     },
 
     onShow: function () {
@@ -201,7 +175,6 @@ Page({
       if (this.data.isRefresh) {
         page = 1;
         this.setData({
-          list: [],
           searchLoadingComplete: false,
           isRefresh: false
         });
@@ -213,7 +186,6 @@ Page({
     onPullDownRefresh: function () { //下拉刷新
         page = 1;
         this.setData({
-            list: [],
             searchLoadingComplete : false
         });
         this.fetchData();
@@ -227,16 +199,13 @@ Page({
         });
         this.fetchData();
     },
-    keywordSearch: function ()
-    {
-        console.log("keyword:" + this.data.keyword);
+    keywordSearch: function () {
         page = 1;
-        this.setData({
-          list: [],
-          searchLoadingComplete: false,
-          toubaoYearmonth:''
+        var that = this;
+        that.setData({
+          cityName: 'tttt',
+          show: true
         });
-        this.fetchData();
     },
 
     toDetailsTap: function (e) {
@@ -245,8 +214,7 @@ Page({
       })
     },
 
-    preImages: function (e) 
-    {
+    preImages: function (e) {
       var that = this
       var pid = e.currentTarget.dataset.pid
       var id = e.currentTarget.dataset.id
@@ -272,8 +240,7 @@ Page({
       this.requestPartTake(e)
     },
 
-    savePartData: function (e)
-    {
+    savePartData: function (e) {
       if (e.detail.value.content == '') {
         wx.showToast({
           title: '内容不能为空',
@@ -289,8 +256,7 @@ Page({
       this.requestPartTake()
     },
 
-    requestPartTake: function()
-    {
+    requestPartTake: function() {
 
       var that = this;
       dian.request({
@@ -356,11 +322,6 @@ Page({
         keyword: e.detail.value
       })
     },
-    toSearchTap:function (e) {
-      wx.navigateTo({
-        url: "/pages/search/search"
-      })
-    },
     doCollect: function (e) 
     {
       var mainid = e.currentTarget.dataset.id;
@@ -415,7 +376,7 @@ Page({
         });
         wx.request({
           loading: true,
-          url: url.taskList,
+          url: remoteUrls.taskList,
           method: 'POST',
           data: {
             pageIndex: page,
@@ -460,12 +421,12 @@ Page({
         console.log(res.target)
       }
       return {
-        title: '最专业的小程序外包市场!',
+        title: messageContant.PROJECT_NAME,
         path: '/pages/main/main',
         success: function (res) {
           // 转发成功
           wx.showToast({
-            title: '分享成功',
+            title: messageContant.SHARE_SUCCESS,
             icon: 'success',
             duration: 2000
           })
@@ -473,12 +434,24 @@ Page({
         fail: function (res) {
           // 转发失败
           wx.showToast({
-            title: '取消分享',
+            title: messageContant.SHARE_FAIL,
             icon: 'success',
             duration: 2000
           })
         }
       }
+    },
+    sureSelectAreaListener: function (e) {
+      var that = this;
+      that.setData({
+        show: false,
+        province: e.detail.currentTarget.dataset.province.provinceId,
+        city: e.detail.currentTarget.dataset.city.countyId,
+        area: e.detail.currentTarget.dataset.area.districtId,
+        provinceName: e.detail.currentTarget.dataset.province.provinceName,
+        cityName: e.detail.currentTarget.dataset.city.countyName,
+        areaName: e.detail.currentTarget.dataset.area.districtName
+      })
     },
 
     goToShare: function () {

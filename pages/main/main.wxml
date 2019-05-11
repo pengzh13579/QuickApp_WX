@@ -1,75 +1,24 @@
-
+<import src="../policyItem/policyItem.wxml" />
 <view class="search">  
   <view class="search-bar">  
-    <view class="search-wrap" bindtap="toSearchTap">  
-      
-        <icon type="search" size="12" class="icon-search" />  
-        <view class="search-word" bindtap="keywordSearch">搜索</view> 
-    
-    </view>  
+    <view class="search-wrap">  
+      <view class="show">
+        <checkbox value="1" checked="true" />
+        省级
+      </view> 
+      <view class="show">
+        <checkbox value="1" checked="true" />
+        市级
+      </view> 
+      <view class="search-word" bindtap="keywordSearch">
+        所在地区：{{provinceName + '-' + cityName + '-' + areaName}}</view> 
+      </view>  
   </view>  
 
   <view class="search-result">  
-    
-      <view class="result-item" wx:for="{{list}}" wx:key="unique"  data-id="{{item.id}}">  
-        <view class="leftcontent">
-           <image src="{{item.headimg}}" class="header"></image> 
-        </view>  
-
-        <view class="rightcontent"> 
-             <text class="title">{{item.title}}</text>  
-             <text class="desc">{{item.des}}</text>  
-             <view class="contentimg" > 
-                <image src="{{imgItem.img}}" class="image" wx:for="{{item.imglist}}" 
-                wx:for-item="imgItem" wx:key="imgID" wx:for-index="imgindex" bindtap='preImages' 
-                data-id="{{imgindex}}" data-pid="{{index}}"></image>
-             </view>
-
-             <text class="textlabel">类型 : {{item.type}}</text> 
-             <text class="textlabel">工期 : {{item.workday}}天</text> 
-             <text class="textlabel">金额 : {{item.money}}元</text> 
-             <text class="textlabel">状态 : {{item.status}}</text> 
-
-             <view class="operate"> 
-                <text class="timeline">{{item.writetime}}</text> 
-
-                <view class="operatedetail" >
-                    <view class="operateItem" bindtap="showPart" data-id="{{item.id}}" data-index="{{item.onlyID}}">
-                       <image src="../../images/part.png" class="operateitemimg"></image>
-                       <text class="operateitemword">竞标</text> 
-                    </view>
-                    <view class="operateItem" data-id="{{item.id}}" data-index="{{index}}" bindtap="doCollect">
-                       <image src="{{collectImgs[index]}}" class="operateitemimg"></image>
-                       <text class="operateitemword">关注</text> 
-                    </view>
-                    <Button class="shareItem" open-type="share">
-                       <image src="../../images/share.png" class="shareitemimg"></image>
-                       <text class="shareitemword">分享</text> 
-                    </Button>
-                </view>
-               
-             </view>
-
-             <view class="comment" wx:if="{{item.bidderlist.length > 0}}"> 
-                <view class="love"> 
-                     <!--
-                     <image src="../../images/rank_on.png" class="lovesign"></image>
-                     -->
-                     <text class="parttake">参与者:</text> 
-                     <view class="loveheader"> 
-                         <image src="{{bidderItem.headimg}}" class="loveimg" 
-                         wx:for="{{item.bidderlist}}" wx:key="headimgID"
-                         wx:for-item="bidderItem"></image> 
-                         
-                     </view>
-                </view>
-                
-             </view>
-              
-        </view>
-      </view>   
-  
-
+    <view class="result-item" wx:for="{{list}}" wx:key="key">  
+      <template is="policyItem" data="{{...item}}"></template>
+    </view>   
     <view class="loading" hidden="{{!searchLoading}}">正在载入更多...</view>  
     <view class="loading complete" hidden="{{!searchLoadingComplete}}">已加载全部</view> 
    
@@ -83,6 +32,7 @@
   </view>
 
 </view>  
-
+<nyz_area_picker show="{{show}}" bind:sureSelectArea="sureSelectAreaListener">
+</nyz_area_picker>
 
 

@@ -2,5 +2,8 @@
     "enablePullDownRefresh": true,
     "backgroundTextStyle": "dark",
     "navigationBarTitleText": "快速开发框架",
-    "navigationBarTextStyle":"white"
+    "navigationBarTextStyle":"white",
+    "usingComponents": {
+        "nyz_area_picker": "../../Component/nyz_area_picker/nyz_area_picker"
+      }
 }

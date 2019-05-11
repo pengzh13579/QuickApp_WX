@@ -4,7 +4,7 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
@@ -12,8 +12,10 @@
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.0.9",
-	"appid": "touristappid",
+	"appid": "wxda0b5a2b182a2def",
 	"projectname": "quickApp",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,

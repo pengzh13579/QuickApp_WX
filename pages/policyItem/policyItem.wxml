@@ -1,0 +1,20 @@
+<template name="policyItem">
+  <view class="rightcontent"> 
+        <text class="title">{{title}}</text>  
+        <text class="desc">{{des}}</text>  
+        <view class="operate"> 
+          <text class="timeline">{{writetime}}</text> 
+
+          <view class="operatedetail" >
+              <view class="operateItem" bindtap="doCollect">
+                  <image src="{{collectImgs[index]}}" class="operateitemimg"></image>
+                  <text class="operateitemword">关注</text> 
+              </view>
+              <Button class="shareItem" open-type="share">
+                  <image src="../../images/share.png" class="shareitemimg"></image>
+                  <text class="shareitemword">分享</text> 
+              </Button>
+          </view>
+        </view>
+  </view>
+</template>

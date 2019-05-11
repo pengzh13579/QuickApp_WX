@@ -4,10 +4,11 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/my/my",
-    "pages/find/find"
+    "pages/find/find",
+    "pages/policyItem/policyItem"
   ],
   "window": {
-    "navigationBarTextStyle": "#F8F8FF",
+    "navigationBarTextStyle": "white",
     "navigationBarTitleText": "快速开发框架",
     "navigationBarBackgroundColor": "#353535",
     "backgroundColor": "#353535"
@@ -44,5 +45,6 @@
     "uploadFile": 10000,
     "downloadFile": 10000
   },
-  "debug": false
+  "debug": false,
+  "sitemapLocation": "sitemap.json"
 }
